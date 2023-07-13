@@ -5,3 +5,5 @@ mydb.db
 files
 data
 ex.py
+download.py
+api.py

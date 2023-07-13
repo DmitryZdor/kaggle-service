@@ -24,6 +24,6 @@ def get_file_details(file_name: str, filter_col: list[str], sort_col: list[str])
                 data = pd.read_csv(f).sort_values(sort_col)
             else:
                 data = pd.read_csv(f)
-        return data.to_dict(index=True, orient="records")
+        return data.fillna('').to_dict(index=True, orient="records")
     except Exception as ex:
         return {"name": file_name, "error": f"{ex}"}

@@ -28,7 +28,18 @@ ___
 ```
 git@github.com:DmitryZdor/kaggle-service.git
 ```
-2. Cоздать и активировать виртуальное окружение:
+2. Создать в корневом каталоге  файл .env
+заполнить данными
+```
+ACCEPT = "..." # your accept
+USER_AGENT = "..." # your user-agent
+USER_NAME = "..." # your kaggle username 
+TOKEN = "..." # your kaggle token
+URL = "https://www.kaggle.com/api/v1/datasets/download"
+```
+
+
+3. Cоздать и активировать виртуальное окружение:
 
 ```
 python3 -m venv venv     
@@ -45,16 +56,16 @@ python3 -m pip install --upgrade pip
             или 
 python -m pip install --upgrade pip
 ```
-3. Установить зависимости из файла requirements.txt:
+4. Установить зависимости из файла requirements.txt:
 
 ```
 pip install -r requirements.txt
 ```
-4. Запустить сервер unicorn из директории kaggle-service/app/
+5. Запустить сервер unicorn из директории kaggle-service/app/
 ```
-uvicorn main:app --host 127.0.0.1 --port 8001 --reload
+uvicorn app:app --host 127.0.0.1 --port 8001 --reload
 ```
-5. Перейти по адресу  
+6. Перейти по адресу  
 
 ```
 http://127.0.0.1:8001/docs
