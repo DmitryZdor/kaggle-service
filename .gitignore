@@ -2,6 +2,6 @@
 venv
 .idea
 mydb.db
-
+files
 data
 ex.py

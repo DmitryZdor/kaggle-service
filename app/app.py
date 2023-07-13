@@ -1,26 +1,22 @@
-from typing import List, Annotated, Union
-from pydantic.v1 import Required
-import requests
-from fastapi import FastAPI, Depends, Query, HTTPException, status
 import os
+from typing import Annotated
 from zipfile import ZipFile
-from dotenv import load_dotenv
-
 
 import models
-from file_properties import get_names_and_column, get_file_details
-from db_connect import engine, SessionLocal, Base
+import requests
+from db_connect import Base, SessionLocal, engine
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, Query
+from file_properties import get_file_details, get_names_and_column
 from sqlalchemy.orm import Session
 
 load_dotenv()
 
-# создаем таблицы
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 
-# определяем зависимость
 def get_db():
     db = SessionLocal()
     try:
@@ -37,13 +33,11 @@ headers = {
 auth = (os.getenv("USER_NAME"), os.getenv("TOKEN"))
 
 
-@app.get("/file/detail/")
+@app.get("/dataset/detail/")
 def detail(file_name: Annotated[str, Query(description="csv file name")],
            sort_col: Annotated[list[str], Query(description="columns for sort")] = None,
            filter_col: Annotated[list[str], Query(description="columns for filter")] = None
            ):
-
-    # query_items = {"sort": sort, "filter": filter_col}
     return get_file_details(file_name=file_name, filter_col=filter_col, sort_col=sort_col)
 
 
@@ -72,7 +66,7 @@ def download_file(ownerSlug, datasetSlug, db: Session = Depends(get_db)):
                 db.commit()
                 db.refresh(new_file)
                 data.append(new_file.id)
-                zf.extract(item.filename, f"../files/")
+                zf.extract(item.filename, "../files/")
         os.remove(f"{datasetSlug}.zip")
         return [db.query(models.File).get(id) for id in data]
 
